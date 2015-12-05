@@ -3,4 +3,39 @@ function timelineRequest(e,n,t,i,s){var l=API_URL_ROOT+"v1/"+(null!=t?"shared/":
 
 Pebble.addEventListener('ready', function() {
   console.log('ready');
+  witRequest('remind me to study tomorrow');
 });
+
+function witRequest(text) {
+  var request = new XMLHttpRequest();
+  var url = 'https://api.wit.ai/message?v=20141022&q=' + encodeURIComponent(text);
+
+  request.onload = function() {
+    var response = JSON.parse(this.responseText);
+    if (request.status == 200 && response) {
+      var outcome = response.outcomes[0];
+      if (outcome.intent == 'remind') {
+        var entities = outcome.entities;
+        var reminder = entities.reminder[0].value;
+        reminder = reminder.charAt(0).toUpperCase() + reminder.slice(1);
+        var time = entities.datetime[0].value; // TODO: case with no datetime
+        var pin = {
+          "id": "pin-" + Math.round((Math.random() * 100000)),
+          "time": time,
+          "layout": {
+            "type": "genericPin",
+            "title": reminder,
+            "tinyIcon": "system://images/NOTIFICATION_FLAG"
+          }
+        }
+        console.log('Inserting pin in the future: ' + JSON.stringify(pin));
+        insertUserPin(pin, function(responseText) {
+          console.log('Result: ' + responseText);
+        });
+      }
+    }
+  }
+  request.open('GET', url);
+  request.setRequestHeader('Authorization', 'Bearer 3ZEWA2PKFV7ZH57NXAIQ5AVIIK72IBQG');
+  request.send(null);
+}
