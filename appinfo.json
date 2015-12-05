@@ -1,0 +1,18 @@
+{
+  "uuid": "16222024-6f1d-414b-ac25-4eeee1c5a73d",
+  "shortName": "remember",
+  "longName": "remember",
+  "companyName": "MakeAwesomeHappen",
+  "versionLabel": "1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
